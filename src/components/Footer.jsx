@@ -75,11 +75,6 @@ export default function Footer() {
                 {isPending ? <Loader2 className="w-4 h-4 animate-spin" /> : <ArrowRight className="w-4 h-4" />}
               </button>
             </div>
-            {status && (
-              <p className={`text-xs px-2 ${status.success ? 'text-green-600 dark:text-green-400' : 'text-red-600 dark:text-red-400'}`}>
-                {status.success ? status.message : status.error}
-              </p>
-            )}
           </form>
         </div>
       </div>
