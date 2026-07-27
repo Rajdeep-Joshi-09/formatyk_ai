@@ -2,36 +2,31 @@
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { useTheme } from 'next-themes';
 import { useEffect, useState } from 'react';
-import { Moon, Sun } from 'lucide-react';
 
 export default function Navbar() {
   const pathname = usePathname();
-  const { theme, setTheme, systemTheme } = useTheme();
   const [mounted, setMounted] = useState(false);
 
   useEffect(() => setMounted(true), []);
-
-  const currentTheme = theme === 'system' ? systemTheme : theme;
-  const isDark = currentTheme === 'dark';
 
   const navLinks = [
     { name: 'Services', path: '/services' },
     { name: 'Pricing', path: '/pricing' },
     { name: 'Case Studies', path: '/case-studies' },
-    { name: 'Contact', path: '/contact' },
+    { name: 'Resources', path: '/resources', hasDropdown: true },
   ];
 
   return (
-    <header className="fixed top-0 w-full z-40 bg-white/80 dark:bg-black/80 backdrop-blur-xl border-b border-black/5 dark:border-white/5 transition-colors duration-300">
-      <div className="max-w-[1200px] mx-auto px-5 md:px-10 h-20 flex items-center justify-between">
+    <header className="fixed top-0 w-full z-40 bg-transparent backdrop-blur-md border-b border-white/5 transition-colors duration-300 pt-4">
+      <div className="max-w-[1400px] mx-auto px-5 md:px-10 h-16 flex items-center justify-between">
         <Link href="/" className="flex items-center gap-2 group">
-          {mounted ? (
-            <img src={isDark ? "/dark.png" : "/light.png"} alt="Formatyk Logo" className="h-12 w-auto object-contain" />
-          ) : (
-            <div className="h-12 w-32 bg-surface-dim dark:bg-surface-container animate-pulse rounded"></div>
-          )}
+          <div className="flex items-center gap-2">
+            <div className="w-8 h-8 rounded bg-gradient-to-br from-[#3b82f6] to-[#8b5cf6] flex items-center justify-center">
+              <span className="text-white font-bold text-lg">F</span>
+            </div>
+            <span className="font-bold text-white text-xl tracking-wide">FORMATYK</span>
+          </div>
         </Link>
         
         <nav className="hidden md:flex items-center gap-8">
@@ -39,31 +34,24 @@ export default function Navbar() {
             <Link 
               key={link.name} 
               href={link.path}
-              className={`text-sm font-medium transition-colors hover:text-accent-electric ${
-                pathname === link.path ? 'text-accent-electric' : 'text-text-secondary dark:text-white/70 hover:dark:text-white'
+              className={`text-sm font-medium transition-colors flex items-center gap-1 ${
+                pathname === link.path ? 'text-white' : 'text-slate-300 hover:text-white'
               }`}
             >
               {link.name}
+              {link.hasDropdown && (
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="opacity-50"><polyline points="6 9 12 15 18 9"></polyline></svg>
+              )}
             </Link>
           ))}
         </nav>
 
-        <div className="flex items-center gap-4">
-          {mounted && (
-            <button 
-              onClick={() => setTheme(isDark ? 'light' : 'dark')}
-              className="p-2 rounded-full hover:bg-surface-container-low dark:hover:bg-white/10 transition-colors text-text-primary dark:text-white cursor-none"
-              aria-label="Toggle Theme"
-            >
-              {isDark ? <Sun className="w-5 h-5" /> : <Moon className="w-5 h-5" />}
-            </button>
-          )}
-
-          <Link href="/contact" className="hidden md:inline-flex items-center justify-center h-10 px-6 rounded-full bg-accent-electric text-white font-medium text-sm transition-transform hover:scale-105 active:scale-95 cursor-none">
-            Get Started
+        <div className="flex items-center gap-6">
+          <Link href="/contact" className="hidden md:inline-flex items-center justify-center h-9 px-5 rounded-full bg-[#050811] border border-[#3b82f6]/50 text-white font-medium text-sm transition-all hover:scale-105 active:scale-95 cursor-none hover:shadow-[0_0_15px_rgba(59,130,246,0.3)] gap-2">
+            Get Started <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
           </Link>
           {/* Mobile Menu Button */}
-          <button className="md:hidden p-2 text-text-primary dark:text-white cursor-none">
+          <button className="md:hidden p-2 text-white cursor-none">
             <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="4" x2="20" y1="12" y2="12"/><line x1="4" x2="20" y1="6" y2="6"/><line x1="4" x2="20" y1="18" y2="18"/></svg>
           </button>
         </div>
