@@ -5,8 +5,8 @@ import Footer from '../components/Footer';
 import { Toaster } from 'react-hot-toast';
 
 export const metadata = {
-  title: 'Formatyk - Corporate Design System',
-  description: 'The next generation of predictive intelligence.',
+  title: 'Formatyk — Custom Software, Automation & ERP Solutions',
+  description: 'Formatyk designs and builds custom software, business automation, and ERP systems for companies ready to move from manual processes to systems that actually work.',
 };
 
 export default function RootLayout({ children }) {

@@ -1,8 +1,10 @@
 "use client";
 
 import Link from 'next/link';
+import Image from 'next/image';
 import { usePathname } from 'next/navigation';
 import { useEffect, useState } from 'react';
+import logoImg from '../assets/formatyk logo.jpg';
 
 export default function Navbar() {
   const pathname = usePathname();
@@ -11,10 +13,10 @@ export default function Navbar() {
   useEffect(() => setMounted(true), []);
 
   const navLinks = [
+    { name: 'About', path: '/about' },
     { name: 'Services', path: '/services' },
     { name: 'Pricing', path: '/pricing' },
-    { name: 'Case Studies', path: '/case-studies' },
-    { name: 'Resources', path: '/resources', hasDropdown: true },
+    { name: 'Contact', path: '/contact' },
   ];
 
   return (
@@ -22,9 +24,13 @@ export default function Navbar() {
       <div className="max-w-[1400px] mx-auto px-5 md:px-10 h-16 flex items-center justify-between">
         <Link href="/" className="flex items-center gap-2 group">
           <div className="flex items-center gap-2">
-            <div className="w-8 h-8 rounded bg-gradient-to-br from-[#3b82f6] to-[#8b5cf6] flex items-center justify-center">
-              <span className="text-white font-bold text-lg">F</span>
-            </div>
+            <Image
+              src={logoImg}
+              alt="Formatyk Logo"
+              width={32}
+              height={32}
+              className="rounded"
+            />
             <span className="font-bold text-white text-xl tracking-wide">FORMATYK</span>
           </div>
         </Link>
@@ -39,16 +45,13 @@ export default function Navbar() {
               }`}
             >
               {link.name}
-              {link.hasDropdown && (
-                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="opacity-50"><polyline points="6 9 12 15 18 9"></polyline></svg>
-              )}
             </Link>
           ))}
         </nav>
 
         <div className="flex items-center gap-6">
           <Link href="/contact" className="hidden md:inline-flex items-center justify-center h-9 px-5 rounded-full bg-[#050811] border border-[#3b82f6]/50 text-white font-medium text-sm transition-all hover:scale-105 active:scale-95 cursor-none hover:shadow-[0_0_15px_rgba(59,130,246,0.3)] gap-2">
-            Get Started <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+            Get a Quote <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
           </Link>
           {/* Mobile Menu Button */}
           <button className="md:hidden p-2 text-white cursor-none">

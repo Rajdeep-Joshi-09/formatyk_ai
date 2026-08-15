@@ -1,14 +1,14 @@
 "use client";
 
 import { motion } from 'framer-motion';
-import { ArrowRight, TrendingUp, MessageSquare, Eye, Cpu } from 'lucide-react';
+import { ArrowRight, Code, Database, Bot, Workflow } from 'lucide-react';
 import data from '../../data.json';
 
 const iconMap = {
-  TrendingUp,
-  MessageSquare,
-  Eye,
-  Cpu
+  Code,
+  Database,
+  Bot,
+  Workflow,
 };
 
 export default function Services() {
@@ -37,7 +37,7 @@ export default function Services() {
       >
         <h1 className="text-4xl md:text-5xl font-bold tracking-tight mb-6">Our Services</h1>
         <p className="text-lg text-text-secondary leading-relaxed">
-          Comprehensive AI solutions designed to transform your operational capabilities and drive sustainable growth.
+          Individually or combined into one solution — everything we offer is built around your exact business process, not a one-size-fits-all package.
         </p>
       </motion.div>
 
@@ -48,7 +48,7 @@ export default function Services() {
         className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8"
       >
         {data.services.map((service) => {
-          const Icon = iconMap[service.icon] || Cpu;
+          const Icon = iconMap[service.icon] || Code;
           return (
             <motion.div 
               key={service.id}
@@ -59,15 +59,13 @@ export default function Services() {
                 <div className="w-12 h-12 rounded-full bg-surface flex items-center justify-center group-hover:bg-accent-electric group-hover:text-white transition-colors text-accent-electric">
                   <Icon className="w-6 h-6" />
                 </div>
-                <button className="w-10 h-10 rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity bg-surface-container-low hover:bg-accent-electric hover:text-white text-text-primary">
-                  <ArrowRight className="w-4 h-4" />
-                </button>
+                <span className="text-4xl font-bold text-white/5 group-hover:text-accent-electric/10 transition-colors select-none">{service.number}</span>
               </div>
               
               <h3 className="text-xl font-semibold mb-3">{service.title}</h3>
               <p className="text-text-secondary text-sm leading-relaxed mb-6">{service.description}</p>
               
-              <div className="w-full h-[1px] bg-black/5 mt-auto" />
+              <div className="w-full h-[1px] bg-black/5 dark:bg-white/5 mt-auto" />
             </motion.div>
           );
         })}

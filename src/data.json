@@ -2,76 +2,31 @@
   "services": [
     {
       "id": 1,
-      "title": "Predictive Analytics",
-      "description": "Harness the power of your data to anticipate market trends and customer behavior.",
-      "icon": "TrendingUp"
+      "title": "IT Services",
+      "description": "Custom software, websites, and IT support built around your exact needs — not a generic package.",
+      "icon": "Code",
+      "number": "01"
     },
     {
       "id": 2,
-      "title": "Natural Language Processing",
-      "description": "Unlock insights from unstructured text data with our advanced NLP models.",
-      "icon": "MessageSquare"
+      "title": "Automation",
+      "description": "Automating repetitive workflows — approvals, notifications, reporting, and data entry — to save your team hours every week.",
+      "icon": "Workflow",
+      "number": "02"
     },
     {
       "id": 3,
-      "title": "Computer Vision",
-      "description": "Automate visual inspections and image analysis for unparalleled efficiency.",
-      "icon": "Eye"
+      "title": "Custom ERP",
+      "description": "Centralized ERP systems to manage inventory, operations, finance, and resources — built specifically for your business.",
+      "icon": "Database",
+      "number": "03"
     },
     {
       "id": 4,
-      "title": "Autonomous Systems",
-      "description": "Deploy self-learning algorithms that optimize operations in real-time.",
-      "icon": "Cpu"
-    }
-  ],
-  "pricing": [
-    {
-      "id": "starter",
-      "name": "Starter",
-      "price": "$499",
-      "period": "/month",
-      "features": ["1 AI Model Deployment", "10,000 API Requests", "Basic Support", "Standard Analytics"],
-      "popular": false
-    },
-    {
-      "id": "pro",
-      "name": "Professional",
-      "price": "$1,299",
-      "period": "/month",
-      "features": ["5 AI Model Deployments", "100,000 API Requests", "Priority Support", "Advanced Analytics", "Custom Integrations"],
-      "popular": true
-    },
-    {
-      "id": "enterprise",
-      "name": "Enterprise",
-      "price": "Custom",
-      "period": "",
-      "features": ["Unlimited Deployments", "Unlimited API Requests", "24/7 Dedicated Support", "On-Premise Options", "Custom AI Development"],
-      "popular": false
-    }
-  ],
-  "caseStudies": [
-    {
-      "id": 1,
-      "client": "Global Logistics Co.",
-      "title": "Optimizing Supply Chains with Predictive AI",
-      "metric": "32%",
-      "metricLabel": "Reduction in delivery delays"
-    },
-    {
-      "id": 2,
-      "client": "FinTech Innovators",
-      "title": "Fraud Detection at Scale",
-      "metric": "99.9%",
-      "metricLabel": "Accuracy in anomaly detection"
-    },
-    {
-      "id": 3,
-      "client": "HealthPlus Network",
-      "title": "AI-Assisted Diagnostics",
-      "metric": "45%",
-      "metricLabel": "Faster diagnosis times"
+      "title": "AI Solutions",
+      "description": "Smart automation for document processing, chatbots, and predictive insights, layered on top of your existing systems.",
+      "icon": "Bot",
+      "number": "04"
     }
   ]
 }

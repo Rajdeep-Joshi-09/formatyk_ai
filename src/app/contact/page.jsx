@@ -42,15 +42,19 @@ export default function Contact() {
         transition={{ duration: 0.6 }}
         className="flex-1 max-w-lg"
       >
-        <h1 className="text-4xl md:text-5xl font-bold tracking-tight mb-6">Let's talk</h1>
+        <h1 className="text-4xl md:text-5xl font-bold tracking-tight mb-6">Contact Us</h1>
         <p className="text-lg text-text-secondary leading-relaxed mb-12">
-          Ready to transform your enterprise with predictive intelligence? Our team of AI specialists is here to help you get started.
+          We look forward to working with you.
         </p>
 
         <div className="space-y-8">
           <div>
-            <h4 className="font-semibold mb-2">Contact</h4>
-            <p className="text-accent-electric">team.formatyk@gmail.com</p>
+            <h4 className="font-semibold mb-2">Phone</h4>
+            <a href="tel:+916351902265" className="text-accent-electric hover:underline">6351 902 265</a>
+          </div>
+          <div>
+            <h4 className="font-semibold mb-2">Email</h4>
+            <a href="mailto:team.formatyk@gmail.com" className="text-accent-electric hover:underline">team.formatyk@gmail.com</a>
           </div>
         </div>
       </motion.div>
@@ -70,7 +74,7 @@ export default function Contact() {
               className="absolute inset-0 z-10 flex flex-col items-center justify-center bg-surface-container-lowest/80 backdrop-blur-sm"
             >
               <div className="w-16 h-16 border-4 border-accent-electric border-t-transparent rounded-full animate-spin mb-4"></div>
-              <p className="text-lg font-medium text-text-primary animate-pulse">Transmitting secure message...</p>
+              <p className="text-lg font-medium text-text-primary animate-pulse">Sending your message...</p>
             </motion.div>
           )}
         </AnimatePresence>
