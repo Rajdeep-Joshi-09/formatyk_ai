@@ -14,7 +14,7 @@ export default function Pricing() {
       },
     },
   };
-
+  //this is item variants
   const itemVariants = {
     hidden: { opacity: 0, y: 20 },
     visible: { opacity: 1, y: 0, transition: { duration: 0.5, ease: "easeOut" } },
@@ -109,14 +109,14 @@ export default function Pricing() {
         <h2 className="text-2xl md:text-3xl font-bold tracking-tight text-center mb-10">Payment Milestones</h2>
       </motion.div>
 
-      <motion.div 
+      <motion.div
         variants={containerVariants}
         initial="hidden"
         animate="visible"
         className="w-full grid grid-cols-1 md:grid-cols-3 gap-8 items-stretch"
       >
         {milestones.map((milestone) => (
-          <motion.div 
+          <motion.div
             key={milestone.id}
             variants={itemVariants}
             className="relative p-8 rounded-3xl bg-surface border border-black/5 dark:border-white/5 shadow-sm flex flex-col items-center text-center"
