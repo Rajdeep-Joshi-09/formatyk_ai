@@ -1,9 +1,10 @@
 "use client";
 
-import { motion } from 'framer-motion';
+import { motion, useScroll, useTransform } from 'framer-motion';
+import { useRef } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
-import { ArrowRight, Sparkles, BarChart3, TrendingUp, CheckCircle2, AlertCircle, Layers, Shield, User, ListChecks } from 'lucide-react';
+import { ArrowRight, Sparkles, BarChart3, TrendingUp, CheckCircle2, AlertCircle, Layers, Shield, User, ListChecks, Search, PenTool, Headset, Code } from 'lucide-react';
 
 export default function Home() {
   const containerVariants = {
@@ -23,7 +24,7 @@ export default function Home() {
 
   return (
     <div className="w-full flex flex-col items-center relative overflow-hidden dark:bg-[#03050B] min-h-screen">
-      
+
       {/* Deep Space Background Overlay */}
       <div className="absolute inset-0 pointer-events-none hidden dark:block">
         <div className="absolute top-[-10%] right-[-5%] w-[800px] h-[800px] bg-accent-electric/20 rounded-full blur-[120px] mix-blend-screen opacity-50" />
@@ -31,14 +32,14 @@ export default function Home() {
       </div>
 
       {/* Full Background Earth Image */}
-      <motion.div 
+      <motion.div
         initial={{ opacity: 0 }}
         animate={{ opacity: 0.6 }}
         transition={{ duration: 1.5 }}
-        className="absolute top-0 right-0 w-full lg:w-[70%] h-[500px] md:h-[800px] lg:h-[1000px] pointer-events-none mix-blend-screen overflow-hidden" 
+        className="absolute top-0 right-0 w-full lg:w-[70%] h-[500px] md:h-[800px] lg:h-[1000px] pointer-events-none mix-blend-screen overflow-hidden"
         style={{ maskImage: 'radial-gradient(circle at center, black 20%, transparent 70%)', WebkitMaskImage: 'radial-gradient(circle at center, black 20%, transparent 70%)' }}
       >
-        <Image 
+        <Image
           src="/earth_network.png"
           alt="Global Network"
           fill
@@ -49,7 +50,7 @@ export default function Home() {
 
       {/* Hero Section */}
       <section className="w-full max-w-[1400px] mx-auto px-5 md:px-10 py-16 md:py-24 flex flex-col lg:flex-row items-center justify-between relative z-10">
-        
+
         {/* Left Content */}
         <motion.div
           variants={containerVariants}
@@ -61,16 +62,16 @@ export default function Home() {
             <Sparkles className="w-4 h-4 text-[#38bdf8]" />
             <span className="text-sm font-medium text-white/90">Formatyk — IT Services & Automation</span>
           </motion.div>
-          
+
           <motion.h1 variants={itemVariants} className="text-5xl md:text-6xl lg:text-7xl font-bold tracking-tight mb-6 text-balance leading-[1.1] text-white">
             Custom software, automation, and ERP — <br />
             <span className="text-gradient">built around your business</span>
           </motion.h1>
-          
+
           <motion.p variants={itemVariants} className="text-lg md:text-xl text-text-secondary dark:text-slate-300 max-w-xl mb-10 text-balance leading-relaxed">
             Formatyk designs and builds custom software, business automation, and ERP systems for companies ready to move from manual, disconnected processes to systems that actually work — without the overhead of a large agency.
           </motion.p>
-          
+
           <motion.div variants={itemVariants} className="flex flex-col sm:flex-row items-center gap-4 w-full sm:w-auto">
             <Link href="/contact" className="relative group h-12 px-8 rounded-full bg-gradient-to-r from-[#0059b5] via-[#3b82f6] to-[#8b5cf6] text-white font-medium flex items-center justify-center gap-2 transition-transform hover:scale-[1.02] active:scale-95 w-full sm:w-auto">
               <span className="absolute inset-0 rounded-full blur-md bg-gradient-to-r from-[#0059b5] via-[#3b82f6] to-[#8b5cf6] opacity-0 group-hover:opacity-70 transition-opacity duration-500"></span>
@@ -88,14 +89,14 @@ export default function Home() {
         </motion.div>
 
         {/* Right Visuals (Cards) */}
-        <motion.div 
+        <motion.div
           initial={{ opacity: 0, scale: 0.95 }}
           animate={{ opacity: 1, scale: 1 }}
           transition={{ duration: 1, delay: 0.2, ease: "easeOut" }}
           className="w-full lg:w-[55%] h-[350px] md:h-[600px] lg:h-[800px] relative mt-10 lg:mt-0"
         >
           {/* Floating Cards */}
-          <motion.div 
+          <motion.div
             animate={{ y: [0, -10, 0] }}
             transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
             className="absolute top-[5%] md:top-[10%] right-[0%] md:right-[10%] w-[220px] md:w-[260px] glass-panel rounded-2xl p-3 md:p-4 z-20 scale-90 md:scale-100"
@@ -107,7 +108,7 @@ export default function Home() {
             </p>
           </motion.div>
 
-          <motion.div 
+          <motion.div
             animate={{ y: [0, 15, 0] }}
             transition={{ duration: 7, repeat: Infinity, ease: "easeInOut", delay: 1 }}
             className="absolute top-[40%] right-[-5%] w-[260px] glass-panel rounded-2xl p-4 hidden lg:block z-20"
@@ -119,7 +120,7 @@ export default function Home() {
             </p>
           </motion.div>
 
-          <motion.div 
+          <motion.div
             animate={{ y: [0, -15, 0] }}
             transition={{ duration: 8, repeat: Infinity, ease: "easeInOut", delay: 2 }}
             className="absolute bottom-[10%] md:bottom-[20%] left-[0%] md:left-[10%] w-[240px] md:w-[260px] glass-panel rounded-2xl p-4 md:p-5 z-20 scale-90 md:scale-100"
@@ -141,7 +142,7 @@ export default function Home() {
       </section>
 
       {/* Scroll Indicator */}
-      <motion.div 
+      <motion.div
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ delay: 1.5, duration: 1 }}
@@ -154,20 +155,20 @@ export default function Home() {
 
       {/* Dashboard Preview Section */}
       <section className="w-full max-w-[1200px] mx-auto px-5 md:px-10 py-24 relative z-10 flex flex-col items-center">
-        
+
         {/* Glow floor effect */}
         <div className="absolute bottom-[-10%] w-[150%] max-w-[1400px] h-[300px] flex items-center justify-center pointer-events-none opacity-60">
-           <div className="absolute w-[80%] h-[1px] bg-gradient-to-r from-transparent via-[#3b82f6] to-transparent shadow-[0_0_20px_5px_rgba(59,130,246,0.6)]" />
-           <div className="absolute w-[60%] h-[100px] bg-[#3b82f6]/20 rounded-[100%] blur-[40px]" />
-           <div className="absolute w-[40%] h-[50px] bg-[#38bdf8]/30 rounded-[100%] blur-[20px]" />
-           {/* Elliptical rings */}
-           <div className="absolute w-[70%] h-[80px] rounded-[100%] border border-[#3b82f6]/30 shadow-[0_0_15px_rgba(59,130,246,0.4)]" />
-           <div className="absolute w-[50%] h-[50px] rounded-[100%] border border-[#8b5cf6]/40 shadow-[0_0_20px_rgba(139,92,246,0.5)]" />
+          <div className="absolute w-[80%] h-[1px] bg-gradient-to-r from-transparent via-[#3b82f6] to-transparent shadow-[0_0_20px_5px_rgba(59,130,246,0.6)]" />
+          <div className="absolute w-[60%] h-[100px] bg-[#3b82f6]/20 rounded-[100%] blur-[40px]" />
+          <div className="absolute w-[40%] h-[50px] bg-[#38bdf8]/30 rounded-[100%] blur-[20px]" />
+          {/* Elliptical rings */}
+          <div className="absolute w-[70%] h-[80px] rounded-[100%] border border-[#3b82f6]/30 shadow-[0_0_15px_rgba(59,130,246,0.4)]" />
+          <div className="absolute w-[50%] h-[50px] rounded-[100%] border border-[#8b5cf6]/40 shadow-[0_0_20px_rgba(139,92,246,0.5)]" />
         </div>
 
         <div className="flex flex-col lg:flex-row gap-12 lg:gap-16 items-center w-full mt-10 md:mt-0">
-          
-          <motion.div 
+
+          <motion.div
             initial={{ opacity: 0, x: -30 }}
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true, margin: "-100px" }}
@@ -184,7 +185,7 @@ export default function Home() {
             <p className="text-slate-400 text-base md:text-lg leading-relaxed mb-8 md:mb-10 max-w-md">
               We start with a discovery call to understand your business, then design, build, and test your solution in phases with regular updates — then deploy it and support it after launch.
             </p>
-            
+
             <Link href="/services" className="flex items-center gap-4 cursor-pointer group">
               <div className="w-12 h-12 md:w-14 md:h-14 rounded-full bg-[#050811] border border-[#3b82f6]/50 shadow-[0_0_20px_rgba(59,130,246,0.4)] flex items-center justify-center group-hover:scale-110 group-hover:shadow-[0_0_35px_rgba(59,130,246,0.6)] transition-all duration-300">
                 <ArrowRight className="w-4 h-4 md:w-5 md:h-5 text-white" />
@@ -196,7 +197,7 @@ export default function Home() {
             </Link>
           </motion.div>
 
-          <motion.div 
+          <motion.div
             initial={{ opacity: 0, y: 40 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, margin: "-100px" }}
@@ -204,13 +205,13 @@ export default function Home() {
             className="w-full lg:w-3/5 relative z-10 px-2"
           >
             {/* Outer glowing border container */}
-            <motion.div 
+            <motion.div
               animate={{ y: [0, -10, 0] }}
               transition={{ duration: 5, repeat: Infinity, ease: "easeInOut" }}
               className="rounded-3xl md:rounded-[2.5rem] p-[1px] md:p-[2px] bg-gradient-to-br from-[#3b82f6]/50 via-[#0a0f1d] to-[#8b5cf6]/50 shadow-[0_0_30px_-5px_rgba(59,130,246,0.4)] md:shadow-[0_0_50px_-10px_rgba(59,130,246,0.5)] rotate-0 lg:rotate-[2deg] hover:rotate-0 transition-transform duration-700 ease-out"
             >
               <div className="bg-[#030612] rounded-[1.4rem] md:rounded-[2.4rem] p-4 sm:p-6 md:p-8 relative overflow-hidden backdrop-blur-xl">
-                
+
                 {/* Dashboard Mockup Top Bar */}
                 <div className="flex items-center justify-between mb-6 md:mb-8 pb-3 md:pb-4 border-b border-white/5">
                   <div className="flex items-center gap-2 md:gap-3">
@@ -290,63 +291,270 @@ export default function Home() {
         </div>
       </section>
 
-      {/* How We Work — Numbered Steps */}
-      <section className="w-full max-w-[1200px] mx-auto px-5 md:px-10 py-24 relative z-10">
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: "-100px" }}
-          transition={{ duration: 0.6 }}
-          className="text-center mb-16"
-        >
-          <div className="inline-flex items-center gap-2 mb-4 md:mb-6 px-3 py-1 rounded-full border border-accent-purple/30 bg-accent-purple/10 text-accent-purple text-[10px] md:text-xs font-semibold uppercase tracking-wider">
-            <Layers className="w-3 h-3 md:w-4 md:h-4" />
-            Our Process
-          </div>
-          <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold tracking-tight text-white">How We Work</h2>
-        </motion.div>
-
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, margin: "-100px" }}
-            transition={{ duration: 0.5 }}
-            className="group relative bg-surface-container-lowest p-8 rounded-2xl border border-black/5 dark:border-white/5 hover:border-accent-electric/30 transition-colors"
-          >
-            <div className="flex items-start justify-between mb-6">
-              <div className="w-12 h-12 rounded-full bg-surface flex items-center justify-center group-hover:bg-accent-electric group-hover:text-white transition-colors text-accent-electric font-bold text-lg">
-                01
-              </div>
-              <span className="text-5xl font-bold text-white/5 group-hover:text-accent-electric/10 transition-colors select-none">01</span>
-            </div>
-            <h3 className="text-xl font-semibold mb-3 text-white">Discover & Propose</h3>
-            <p className="text-text-secondary text-sm leading-relaxed">
-              We start with a discovery call to understand your business, current systems, and goals — then share a tailored proposal with clear scope, timeline, and pricing.
-            </p>
-          </motion.div>
-
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, margin: "-100px" }}
-            transition={{ duration: 0.5, delay: 0.1 }}
-            className="group relative bg-surface-container-lowest p-8 rounded-2xl border border-black/5 dark:border-white/5 hover:border-accent-electric/30 transition-colors"
-          >
-            <div className="flex items-start justify-between mb-6">
-              <div className="w-12 h-12 rounded-full bg-surface flex items-center justify-center group-hover:bg-accent-electric group-hover:text-white transition-colors text-accent-electric font-bold text-lg">
-                02
-              </div>
-              <span className="text-5xl font-bold text-white/5 group-hover:text-accent-electric/10 transition-colors select-none">02</span>
-            </div>
-            <h3 className="text-xl font-semibold mb-3 text-white">Build, Test & Deliver</h3>
-            <p className="text-text-secondary text-sm leading-relaxed">
-              From there we design, build, and test your solution in phases with regular updates, then deploy it and hand over full documentation — with support to follow.
-            </p>
-          </motion.div>
-        </div>
-      </section>
+      {/* How We Work — Horizontal Scroll-Driven Timeline */}
+      <HowWeWorkTimeline />
 
     </div>
   );
 }
+
+
+/* ─── Vertical S-Curve Roadmap Timeline Component ─── */
+function HowWeWorkTimeline() {
+  const containerRef = useRef(null);
+
+  // Track scroll progress of the entire roadmap container
+  const { scrollYProgress } = useScroll({
+    target: containerRef,
+    offset: ["start center", "end center"],
+  });
+
+  const steps = [
+    {
+      num: '01',
+      title: 'Discover & Propose',
+      desc: 'We start with a discovery call to understand your business, current systems, and goals — then share a tailored proposal with clear scope, timeline, and pricing.',
+      color: '#3b82f6',
+      bgColor: 'rgba(59, 130, 246, 0.1)',
+      icon: Search,
+      isLeftArcColored: true,
+      textSide: 'left',
+    },
+    {
+      num: '02',
+      title: 'Understand Requirements',
+      desc: 'We dive deep into your workflows, pain points, and existing tools — documenting every requirement so nothing gets missed during development.',
+      color: '#8b5cf6',
+      bgColor: 'rgba(139, 92, 246, 0.1)',
+      icon: ListChecks,
+      isLeftArcColored: false,
+      textSide: 'right',
+    },
+    {
+      num: '03',
+      title: 'System Design',
+      desc: 'Our team architects the solution — database structure, UI wireframes, integrations, and user flows — all reviewed and approved by you before a single line of code is written.',
+      color: '#06b6d4',
+      bgColor: 'rgba(6, 182, 212, 0.1)',
+      icon: PenTool,
+      isLeftArcColored: true,
+      textSide: 'left',
+    },
+    {
+      num: '04',
+      title: 'Development',
+      desc: 'We build your solution in phases with regular demos and updates. You see progress in real time, give feedback, and steer the direction at every milestone.',
+      color: '#ec4899',
+      bgColor: 'rgba(236, 72, 153, 0.1)',
+      icon: Code,
+      isLeftArcColored: false,
+      textSide: 'right',
+    },
+    {
+      num: '05',
+      title: 'Testing & Review',
+      desc: "Rigorous QA across devices, performance testing, and a full walkthrough with you — we don't ship until everything works exactly as expected.",
+      color: '#a78bfa',
+      bgColor: 'rgba(167, 139, 250, 0.1)',
+      icon: CheckCircle2,
+      isLeftArcColored: true,
+      textSide: 'left',
+    },
+    {
+      num: '06',
+      title: 'Deliver & Support',
+      desc: 'We deploy to production, hand over full documentation and source code, and stay available for ongoing support — your project, your ownership.',
+      color: '#10b981',
+      bgColor: 'rgba(16, 185, 129, 0.1)',
+      icon: Headset,
+      isLeftArcColored: false,
+      textSide: 'right',
+    },
+  ];
+
+  return (
+    <section ref={containerRef} className="w-full max-w-[1200px] mx-auto px-5 md:px-10 py-24 relative z-10">
+
+      {/* Header */}
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true }}
+        transition={{ duration: 0.6 }}
+        className="text-center mb-24"
+      >
+        <div className="inline-flex items-center gap-2 mb-4 px-3 py-1 rounded-full border border-accent-purple/30 bg-accent-purple/10 text-accent-purple text-xs font-semibold uppercase tracking-wider">
+          <Layers className="w-4 h-4" />
+          Our Process
+        </div>
+        <h2 className="text-4xl md:text-5xl font-bold tracking-tight text-white">How We Work</h2>
+        <p className="text-text-secondary text-sm md:text-base mt-4 max-w-xl mx-auto">
+          A structured, transparent roadmap built to deliver high-quality custom systems on time.
+        </p>
+      </motion.div>
+
+      {/* Roadmap Container */}
+      <div className="relative">
+
+        {/* ─── Desktop: Continuous S-Curve SVG ─── */}
+        <div className="hidden md:block absolute left-1/2 -translate-x-1/2 top-0 bottom-0 w-[160px] pointer-events-none z-0">
+          <svg className="w-full h-full" viewBox="0 0 160 1320" fill="none" preserveAspectRatio="none">
+            <defs>
+              <linearGradient id="s-curve-gradient" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0%" stopColor="#3b82f6" />
+                <stop offset="25%" stopColor="#8b5cf6" />
+                <stop offset="50%" stopColor="#06b6d4" />
+                <stop offset="75%" stopColor="#ec4899" />
+                <stop offset="100%" stopColor="#10b981" />
+              </linearGradient>
+            </defs>
+            {/* Background Grey Path */}
+            <path
+              d="M 80 110 C 10 165, 10 275, 80 330 C 150 385, 150 495, 80 550 C 10 605, 10 715, 80 770 C 150 825, 150 935, 80 990 C 10 1045, 10 1155, 80 1210"
+              stroke="#1e293b"
+              strokeWidth="4"
+              strokeLinecap="round"
+            />
+            {/* Animated Active Path */}
+            <motion.path
+              d="M 80 110 C 10 165, 10 275, 80 330 C 150 385, 150 495, 80 550 C 10 605, 10 715, 80 770 C 150 825, 150 935, 80 990 C 10 1045, 10 1155, 80 1210"
+              stroke="url(#s-curve-gradient)"
+              strokeWidth="4"
+              strokeLinecap="round"
+              style={{ pathLength: scrollYProgress }}
+            />
+          </svg>
+        </div>
+
+        {/* ─── Mobile: Straight vertical path ─── */}
+        <div className="md:hidden absolute left-8 top-0 bottom-0 w-[2px] pointer-events-none z-0">
+          <div className="w-full h-full bg-[#1e293b] rounded" />
+          <motion.div
+            className="absolute top-0 left-0 w-full bg-gradient-to-b from-[#3b82f6] via-[#8b5cf6] to-[#10b981] rounded origin-top"
+            style={{ scaleY: scrollYProgress, height: '100%' }}
+          />
+        </div>
+
+        {/* Step Items */}
+        <div className="relative z-10 flex flex-col">
+          {steps.map((step, index) => {
+            const Icon = step.icon;
+            const isLeft = step.textSide === 'left';
+
+            return (
+              <div
+                key={step.num}
+                className="relative flex md:items-center justify-between min-h-[220px] md:h-[220px] mb-12 md:mb-0 last:mb-0 flex-row"
+              >
+                {/* Left Panel (Desktop only) */}
+                <div className="hidden md:flex w-[calc(50%-80px)] justify-end pr-8">
+                  {isLeft && (
+                    <motion.div
+                      initial={{ opacity: 0, x: -30 }}
+                      whileInView={{ opacity: 1, x: 0 }}
+                      viewport={{ once: true, margin: "-50px" }}
+                      transition={{ duration: 0.6, ease: "easeOut" }}
+                      className="text-right max-w-md group"
+                    >
+                      <span className="text-xs font-bold uppercase tracking-wider mb-2 block" style={{ color: step.color }}>
+                        Step {step.num}
+                      </span>
+                      <h3 className="text-xl font-semibold mb-2 text-white group-hover:text-white/90 transition-colors">
+                        {step.title}
+                      </h3>
+                      <p className="text-text-secondary text-sm leading-relaxed">
+                        {step.desc}
+                      </p>
+                    </motion.div>
+                  )}
+                </div>
+
+                {/* Central Circle (Desktop & Mobile) */}
+                <div className="w-[80px] md:w-[160px] flex-shrink-0 flex items-center justify-center relative">
+
+                  {/* Alternating Semi-Circle SVG (Desktop specific sizing) */}
+                  <div className="w-[80px] h-[80px] md:w-[110px] md:h-[110px] relative z-10">
+                    <svg className="w-full h-full rotate-90 md:rotate-0" viewBox="0 0 120 120" fill="none">
+                      {/* Left Arc Path */}
+                      <motion.path
+                        d="M 60 10 A 50 50 0 0 0 60 110"
+                        stroke={step.isLeftArcColored ? step.color : '#1e293b'}
+                        strokeWidth="4"
+                        strokeLinecap="round"
+                        initial={step.isLeftArcColored ? { pathLength: 0 } : {}}
+                        whileInView={step.isLeftArcColored ? { pathLength: 1 } : {}}
+                        viewport={{ once: true }}
+                        transition={{ duration: 0.8, delay: 0.2 }}
+                      />
+                      {/* Right Arc Path */}
+                      <motion.path
+                        d="M 60 110 A 50 50 0 0 0 60 10"
+                        stroke={!step.isLeftArcColored ? step.color : '#1e293b'}
+                        strokeWidth="4"
+                        strokeLinecap="round"
+                        initial={!step.isLeftArcColored ? { pathLength: 0 } : {}}
+                        whileInView={!step.isLeftArcColored ? { pathLength: 1 } : {}}
+                        viewport={{ once: true }}
+                        transition={{ duration: 0.8, delay: 0.2 }}
+                      />
+                    </svg>
+
+                    {/* Central Icon Container */}
+                    <div className="absolute inset-0 flex items-center justify-center">
+                      <motion.div
+                        initial={{ scale: 0.8, opacity: 0 }}
+                        whileInView={{ scale: 1, opacity: 1 }}
+                        viewport={{ once: true }}
+                        transition={{ type: 'spring', stiffness: 200, delay: 0.1 }}
+                        className="w-[48px] h-[48px] md:w-[70px] md:h-[70px] rounded-full flex items-center justify-center bg-[#060913] border border-white/5 shadow-inner"
+                        style={{
+                          boxShadow: `inset 0 0 12px ${step.bgColor}`,
+                        }}
+                      >
+                        <Icon className="w-5 h-5 md:w-7 md:h-7" style={{ color: step.color }} />
+                      </motion.div>
+                    </div>
+
+                    {/* Glowing outer shadow ring */}
+                    <div
+                      className="absolute inset-0 rounded-full blur-md opacity-25 pointer-events-none"
+                      style={{
+                        boxShadow: `0 0 20px ${step.color}`,
+                      }}
+                    />
+                  </div>
+                </div>
+
+                {/* Right Panel (Desktop / Mobile layout fallback) */}
+                <div className="w-[calc(100%-80px)] md:w-[calc(50%-80px)] pl-6 md:pl-8 flex justify-start">
+                  {(!isLeft || typeof window !== 'undefined' && window.innerWidth < 768) && (
+                    <motion.div
+                      initial={{ opacity: 0, x: 30 }}
+                      whileInView={{ opacity: 1, x: 0 }}
+                      viewport={{ once: true, margin: "-50px" }}
+                      transition={{ duration: 0.6, ease: "easeOut" }}
+                      className="text-left max-w-md group"
+                    >
+                      <span className="text-xs font-bold uppercase tracking-wider mb-2 block md:hidden" style={{ color: step.color }}>
+                        Step {step.num}
+                      </span>
+                      <h3 className="text-lg md:text-xl font-semibold mb-2 text-white group-hover:text-white/90 transition-colors">
+                        {step.title}
+                      </h3>
+                      <p className="text-text-secondary text-sm leading-relaxed">
+                        {step.desc}
+                      </p>
+                    </motion.div>
+                  )}
+                </div>
+
+              </div>
+            );
+          })}
+        </div>
+
+      </div>
+    </section>
+  );
+}
+
