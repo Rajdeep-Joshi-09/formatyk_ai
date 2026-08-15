@@ -2,61 +2,45 @@
 
 import Link from 'next/link';
 import Image from 'next/image';
-import { usePathname } from 'next/navigation';
-import { useEffect, useState } from 'react';
 import logoImg from '../assets/formatyk logo.jpg';
+import { ArrowRight, Sparkles } from 'lucide-react';
 
 export default function Navbar() {
-  const pathname = usePathname();
-  const [mounted, setMounted] = useState(false);
-
-  useEffect(() => setMounted(true), []);
-
-  const navLinks = [
-    { name: 'About', path: '/about' },
-    { name: 'Services', path: '/services' },
-    { name: 'Pricing', path: '/pricing' },
-    { name: 'Contact', path: '/contact' },
-  ];
-
   return (
-    <header className="fixed top-0 w-full z-40 bg-transparent backdrop-blur-md border-b border-white/5 transition-colors duration-300 pt-4">
+    <header className="fixed top-0 w-full z-40 bg-[#03050B]/60 backdrop-blur-xl border-b border-white/5 transition-colors duration-300">
       <div className="max-w-[1400px] mx-auto px-5 md:px-10 h-16 flex items-center justify-between">
-        <Link href="/" className="flex items-center gap-2 group">
-          <div className="flex items-center gap-2">
+        {/* Left Brand Identity */}
+        <Link href="/" className="flex items-center gap-3 group cursor-pointer">
+          <div className="relative">
             <Image
               src={logoImg}
               alt="Formatyk Logo"
-              width={32}
-              height={32}
-              className="rounded"
+              width={34}
+              height={34}
+              className="rounded-lg shadow-[0_0_12px_rgba(59,130,246,0.4)]"
             />
-            <span className="font-bold text-white text-xl tracking-wide">FORMATYK</span>
+            <div className="absolute -bottom-0.5 -right-0.5 w-2 h-2 rounded-full bg-emerald-400 border border-[#03050B] shadow-[0_0_6px_rgba(16,185,129,0.8)]" />
+          </div>
+          <div className="flex flex-col">
+            <span className="font-bold text-white text-lg tracking-wider leading-none">FORMATYK</span>
+            <span className="text-[10px] text-slate-400 font-mono tracking-widest leading-none mt-1">ENGINEERING</span>
           </div>
         </Link>
-        
-        <nav className="hidden md:flex items-center gap-8">
-          {navLinks.map((link) => (
-            <Link 
-              key={link.name} 
-              href={link.path}
-              className={`text-sm font-medium transition-colors flex items-center gap-1 ${
-                pathname === link.path ? 'text-white' : 'text-slate-300 hover:text-white'
-              }`}
-            >
-              {link.name}
-            </Link>
-          ))}
-        </nav>
 
-        <div className="flex items-center gap-6">
-          <Link href="/contact" className="hidden md:inline-flex items-center justify-center h-9 px-5 rounded-full bg-[#050811] border border-[#3b82f6]/50 text-white font-medium text-sm transition-all hover:scale-105 active:scale-95 cursor-none hover:shadow-[0_0_15px_rgba(59,130,246,0.3)] gap-2">
-            Get a Quote <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+        {/* Right CTA */}
+        <div className="flex items-center gap-4">
+          <div className="hidden sm:flex items-center gap-2 px-3 py-1 rounded-full bg-white/5 border border-white/10 text-xs text-slate-300 font-mono">
+            <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
+            <span>ACCEPTING CLIENTS</span>
+          </div>
+
+          <Link 
+            href="#contact" 
+            className="inline-flex items-center justify-center h-10 px-6 rounded-full bg-gradient-to-r from-[#0059b5] via-[#3b82f6] to-[#8b5cf6] text-white font-medium text-xs tracking-wide uppercase transition-all hover:scale-105 active:scale-95 shadow-[0_0_20px_rgba(59,130,246,0.4)] hover:shadow-[0_0_30px_rgba(59,130,246,0.7)] gap-2 group cursor-pointer"
+          >
+            <span>Get a Quote</span>
+            <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-0.5 transition-transform" />
           </Link>
-          {/* Mobile Menu Button */}
-          <button className="md:hidden p-2 text-white cursor-none">
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="4" x2="20" y1="12" y2="12"/><line x1="4" x2="20" y1="6" y2="6"/><line x1="4" x2="20" y1="18" y2="18"/></svg>
-          </button>
         </div>
       </div>
     </header>

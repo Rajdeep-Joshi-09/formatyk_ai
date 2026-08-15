@@ -71,10 +71,10 @@ export default function Footer() {
             <h4 className="text-white font-semibold mb-6">Quick Links</h4>
             <div className="flex flex-col gap-4">
               {[
-                { label: 'About', href: '/about' },
-                { label: 'Services', href: '/services' },
-                { label: 'Pricing', href: '/pricing' },
-                { label: 'Contact', href: '/contact' },
+                { label: 'About', href: '#about' },
+                { label: 'Services', href: '#services' },
+                { label: 'Pricing', href: '#pricing' },
+                { label: 'Contact', href: '#contact' },
               ].map((link) => (
                 <Link key={link.label} href={link.href} className="text-slate-400 hover:text-white text-sm transition-colors w-fit">
                   {link.label}

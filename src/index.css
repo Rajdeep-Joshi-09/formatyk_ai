@@ -25,6 +25,9 @@
 }
 
 @layer base {
+  html {
+    scroll-behavior: smooth;
+  }
   body {
     @apply bg-background-page text-text-primary font-inter antialiased overflow-x-hidden;
   }
