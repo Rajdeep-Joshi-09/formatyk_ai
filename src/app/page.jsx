@@ -1,11 +1,11 @@
 "use client";
 
-import { motion, useScroll, useTransform, AnimatePresence } from 'framer-motion';
+import { motion, useScroll, useTransform, AnimatePresence, useSpring, useMotionValue, useMotionTemplate } from 'framer-motion';
 import { useRef, useState, useEffect } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
-import { 
-  ArrowRight, Sparkles, BarChart3, TrendingUp, CheckCircle2, AlertCircle, 
+import {
+  ArrowRight, Sparkles, BarChart3, TrendingUp, CheckCircle2, AlertCircle,
   Layers, Shield, User, ListChecks, Search, PenTool, Headset, Code,
   Eye, Target, Check, Send, Loader2, Database, Bot, Workflow, Lock, Unlock,
   Zap, Cpu, Globe, Activity, Terminal, Sliders, XCircle, Server, Key,
@@ -39,30 +39,40 @@ export default function Home() {
   const [shattering, setShattering] = useState(false);
   const [activeArchTab, setActiveArchTab] = useState('erp');
 
+  const springConfig = { stiffness: 50, damping: 20, restDelta: 0.001 };
+
   // Global Page scroll tracking
-  const { scrollY } = useScroll();
+  const { scrollYProgress: scrollYRaw, scrollY: rawYPixels } = useScroll();
+  const scrollY = useSpring(rawYPixels, springConfig);
 
-  // Scroll tracking for Hero
-  const { scrollYProgress: heroScroll } = useScroll({
+  // Scroll tracking for Hero (200vh Portal)
+  const { scrollYProgress: heroScrollRaw } = useScroll({
     target: heroRef,
-    offset: ["start start", "end start"]
+    offset: ["start start", "end end"]
   });
+  const heroScroll = useSpring(heroScrollRaw, springConfig);
 
-  const yEarth = useTransform(heroScroll, [0, 1], [0, 200]);
-  const scaleEarth = useTransform(heroScroll, [0, 1], [1, 1.08]);
-  const opacityHero = useTransform(heroScroll, [0, 0.8], [1, 0]);
-  const yHeroLeft = useTransform(heroScroll, [0, 1], [0, -80]);
+  // Portal text animations (Fades out quickly in first 30%)
+  const opacityHeroText = useTransform(heroScroll, [0, 0.3], [1, 0]);
+  const yHeroText = useTransform(heroScroll, [0, 0.3], [0, -100]);
+  const scaleHeroText = useTransform(heroScroll, [0, 0.3], [1, 0.9]);
 
-  // Floating cards parallax
-  const yCard1 = useTransform(heroScroll, [0, 1], [0, -140]);
-  const yCard2 = useTransform(heroScroll, [0, 1], [0, -70]);
-  const yCard3 = useTransform(heroScroll, [0, 1], [0, -200]);
+  // Dashboard Portal Box zooming in
+  const widthPortal = useTransform(heroScroll, [0.1, 0.8], ["90%", "100%"]);
+  const heightPortal = useTransform(heroScroll, [0.1, 0.8], ["55vh", "100vh"]);
+  const radiusPortal = useTransform(heroScroll, [0.1, 0.8], ["40px", "0px"]);
+  const yPortal = useTransform(heroScroll, [0.1, 0.8], ["25vh", "0vh"]); // rises up to fill screen
+
+  // Dashboard internals fade out as we zoom in
+  const opacityPortalContent = useTransform(heroScroll, [0.3, 0.6], [1, 0]);
+  const scalePortalContent = useTransform(heroScroll, [0.1, 0.8], [1, 1.2]);
 
   // Scroll tracking for About Section (Zipper Scroll Effect)
-  const { scrollYProgress: aboutScroll } = useScroll({
+  const { scrollYProgress: aboutScrollRaw } = useScroll({
     target: aboutRef,
     offset: ["start end", "end start"]
   });
+  const aboutScroll = useSpring(aboutScrollRaw, springConfig);
 
   const yAboutHeader = useTransform(aboutScroll, [0, 0.2], [80, 0]);
   const opacityAboutHeader = useTransform(aboutScroll, [0, 0.2], [0, 1]);
@@ -77,10 +87,11 @@ export default function Home() {
   const xWatermark = useTransform(aboutScroll, [0, 1], [-200, 180]);
 
   // Scroll tracking for Services Section (Zipper Scroll Effect)
-  const { scrollYProgress: servicesScroll } = useScroll({
+  const { scrollYProgress: servicesScrollRaw } = useScroll({
     target: servicesRef,
     offset: ["start end", "end start"]
   });
+  const servicesScroll = useSpring(servicesScrollRaw, springConfig);
 
   const yServicesHeader = useTransform(servicesScroll, [0, 0.2], [60, 0]);
   const opacityServicesHeader = useTransform(servicesScroll, [0, 0.2], [0, 1]);
@@ -102,10 +113,11 @@ export default function Home() {
   const scaleService4 = useTransform(servicesScroll, [0.2, 0.4], [0.96, 1]);
 
   // Scroll tracking for Dashboard Section
-  const { scrollYProgress: dashboardScroll } = useScroll({
+  const { scrollYProgress: dashboardScrollRaw } = useScroll({
     target: dashboardRef,
     offset: ["start end", "end center"]
   });
+  const dashboardScroll = useSpring(dashboardScrollRaw, springConfig);
 
   const xDashboardText = useTransform(dashboardScroll, [0, 0.4], [-80, 0]);
   const opacityDashboardText = useTransform(dashboardScroll, [0, 0.3], [0, 1]);
@@ -114,16 +126,17 @@ export default function Home() {
   const rotateDashboardCard = useTransform(dashboardScroll, [0, 0.4], [6, 0]);
 
   // Scroll tracking for Pricing Section (Zipper Scroll Effect)
-  const { scrollYProgress: pricingScroll } = useScroll({
+  const { scrollYProgress: pricingScrollRaw } = useScroll({
     target: pricingRef,
     offset: ["start end", "end start"]
   });
+  const pricingScroll = useSpring(pricingScrollRaw, springConfig);
 
   const yPricingHeader = useTransform(pricingScroll, [0, 0.2], [60, 0]);
   const opacityPricingHeader = useTransform(pricingScroll, [0, 0.2], [0, 1]);
   const scalePricingCard = useTransform(pricingScroll, [0.05, 0.3], [0.94, 1]);
   const opacityPricingCard = useTransform(pricingScroll, [0.05, 0.3], [0, 1]);
-  
+
   const yMilestonesHeader = useTransform(pricingScroll, [0.1, 0.35], [40, 0]);
   const opacityMilestonesHeader = useTransform(pricingScroll, [0.1, 0.35], [0, 1]);
 
@@ -140,10 +153,11 @@ export default function Home() {
   const scaleMilestone3 = useTransform(pricingScroll, [0.25, 0.5], [0.96, 1]);
 
   // Scroll tracking for Contact Section (Zipper Scroll Effect)
-  const { scrollYProgress: contactScroll } = useScroll({
+  const { scrollYProgress: contactScrollRaw } = useScroll({
     target: contactRef,
     offset: ["start end", "end center"]
   });
+  const contactScroll = useSpring(contactScrollRaw, springConfig);
 
   const xContactLeft = useTransform(contactScroll, [0, 0.4], [-80, 0]);
   const opacityContactLeft = useTransform(contactScroll, [0, 0.3], [0, 1]);
@@ -179,12 +193,12 @@ export default function Home() {
     if (shattering || decrypted) return;
     setShattering(true);
     toast.success("Security bypass initiated...", { icon: "🔐" });
-    
+
     setTimeout(() => {
       setDecrypted(true);
       setShattering(false);
       toast.success("System Decrypted!", { icon: "🔓" });
-      
+
       // Auto-scroll to Roadmap
       setTimeout(() => {
         const el = document.getElementById('how-we-work');
@@ -219,138 +233,125 @@ export default function Home() {
 
   return (
     <div ref={containerRef} className="w-full flex flex-col items-center relative overflow-hidden dark:bg-[#03050B] min-h-screen">
-      
-      {/* Background Parallax Glow Fields */}
+
+      {/* Background Parallax Glow Fields (Vibrant for Glassmorphism) */}
       <motion.div style={{ y: yGlow1 }} className="absolute inset-0 pointer-events-none hidden dark:block z-0">
-        <div className="absolute top-[-5%] right-[-10%] w-[1000px] h-[1000px] bg-accent-electric/15 rounded-full blur-[140px] mix-blend-screen opacity-65" />
-        <div className="absolute top-[35%] left-[-15%] w-[800px] h-[800px] bg-accent-purple/10 rounded-full blur-[140px] mix-blend-screen opacity-45" />
-        <div className="absolute bottom-[20%] right-[-10%] w-[900px] h-[900px] bg-emerald-500/5 rounded-full blur-[140px] mix-blend-screen opacity-35" />
+        <div className="absolute top-[0%] right-[-10%] w-[1000px] h-[1000px] bg-[#3b82f6]/30 rounded-full blur-[150px] mix-blend-screen opacity-100" />
+        <div className="absolute top-[35%] left-[-15%] w-[900px] h-[900px] bg-[#ec4899]/25 rounded-full blur-[160px] mix-blend-screen opacity-90" />
+        <div className="absolute bottom-[20%] right-[-10%] w-[1000px] h-[1000px] bg-[#8b5cf6]/30 rounded-full blur-[160px] mix-blend-screen opacity-90" />
       </motion.div>
 
       {/* Rotating Background Stars / Interactive Grid */}
       <div className="absolute inset-0 bg-[radial-gradient(#1e293b_1px,transparent_1px)] [background-size:24px_24px] opacity-10 pointer-events-none z-0" />
 
-      {/* Full Background Earth Image */}
-      <motion.div
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 0.6 }}
-        transition={{ duration: 1.5 }}
-        style={{ 
-          y: yEarth, 
-          scale: scaleEarth,
-          maskImage: 'radial-gradient(circle at center, black 25%, transparent 70%)', 
-          WebkitMaskImage: 'radial-gradient(circle at center, black 25%, transparent 70%)' 
-        }}
-        className="absolute top-0 right-0 w-full lg:w-[70%] h-[600px] md:h-[900px] lg:h-[1100px] pointer-events-none mix-blend-screen overflow-hidden z-0"
-      >
-        <Image
-          src="/earth_network.png"
-          alt="Global Network"
-          fill
-          className="object-cover object-right md:object-center"
-          priority
-        />
-      </motion.div>
 
-      {/* ─── 1. HERO SECTION ─── */}
-      <section ref={heroRef} id="home-section" className="w-full max-w-[1400px] mx-auto px-5 md:px-10 py-16 md:py-24 flex flex-col lg:flex-row items-center justify-between relative z-10 min-h-[90vh]">
-        {/* Left Hero Content */}
-        <motion.div
-          initial="hidden"
-          animate="visible"
-          style={{ y: yHeroLeft, opacity: opacityHero }}
-          className="w-full lg:w-[45%] flex flex-col items-start mt-10 lg:mt-0"
-        >
-          <motion.div 
-            initial={{ scale: 0.9, opacity: 0 }}
-            animate={{ scale: 1, opacity: 1 }}
-            transition={{ delay: 0.2 }}
-            className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/5 border border-white/10 mb-8 backdrop-blur-md"
+      {/* ─── 1. HERO SECTION (Page-in-Page Portal) ─── */}
+      <div ref={heroRef} id="home-section" className="relative h-[200vh] w-full z-10">
+        <div className="sticky top-0 w-full h-screen overflow-hidden flex flex-col items-center justify-center">
+
+          {/* Main Central Typography */}
+          <motion.div
+            style={{ y: yHeroText, opacity: opacityHeroText, scale: scaleHeroText }}
+            className="absolute top-[12%] md:top-[15%] flex flex-col items-center text-center z-10 px-5 w-full max-w-[1400px]"
           >
-            <Sparkles className="w-4 h-4 text-[#38bdf8] animate-pulse" />
-            <span className="text-sm font-medium text-white/90">Formatyk — Software Engineering</span>
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.2 }}
+              className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/5 border border-white/10 mb-2 backdrop-blur-md"
+            >
+              <Sparkles className="w-4 h-4 text-[#38bdf8] animate-pulse" />
+              <span className="text-sm font-medium text-white/90">Formatyk Engine v2.0</span>
+            </motion.div>
+
+            {/* Interactive Cursor-Linked Hero Text */}
+            <InteractiveFormatykText />
+
+            <motion.p
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ delay: 0.6 }}
+              className="text-lg md:text-xl text-slate-400 max-w-2xl text-balance mt-4"
+            >
+              Software built around your business. Not a template. Not an agency. A pure engineering team building custom ERPs and AI automation for your exact workflow.
+            </motion.p>
           </motion.div>
 
-          <h1 className="text-5xl md:text-6xl lg:text-7xl font-bold tracking-tight mb-6 text-balance leading-[1.1] text-white">
-            Custom software, automation, and ERP — <br />
-            <span className="text-gradient">built around your business</span>
-          </h1>
-
-          <p className="text-lg md:text-xl text-text-secondary dark:text-slate-300 max-w-xl mb-10 text-balance leading-relaxed">
-            Formatyk designs and builds custom software, business automation, and ERP systems for companies ready to move from manual, disconnected processes to systems that actually work — without the overhead of a large agency.
-          </p>
-
-          <div className="flex flex-col sm:flex-row items-center gap-4 w-full sm:w-auto">
-            <Link href="#contact" className="relative group h-12 px-8 rounded-full bg-gradient-to-r from-[#0059b5] via-[#3b82f6] to-[#8b5cf6] text-white font-medium flex items-center justify-center gap-2 transition-transform hover:scale-[1.02] active:scale-95 w-full sm:w-auto">
-              <span className="absolute inset-0 rounded-full blur-md bg-gradient-to-r from-[#0059b5] via-[#3b82f6] to-[#8b5cf6] opacity-0 group-hover:opacity-70 transition-opacity duration-500"></span>
-              <span className="relative flex items-center gap-2">Get a Quote <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" /></span>
-            </Link>
-            <Link href="#services" className="h-12 px-8 rounded-full border border-white/20 hover:border-white/40 hover:bg-white/5 text-white font-medium flex items-center justify-center gap-2 transition-all w-full sm:w-auto backdrop-blur-md group">
-              See Our Services
-            </Link>
-          </div>
-
-          <div className="mt-12 flex items-center gap-3">
-            <div className="w-1.5 h-1.5 rounded-full bg-[#38bdf8] shadow-[0_0_8px_rgba(56,189,248,0.8)]" />
-            <p className="text-sm text-slate-400">Direct access to the team building your solution — no account managers, no middlemen.</p>
-          </div>
-        </motion.div>
-
-        {/* Right Hero Visuals */}
-        <motion.div
-          initial={{ opacity: 0, scale: 0.95 }}
-          animate={{ opacity: 1, scale: 1 }}
-          transition={{ duration: 1, delay: 0.2, ease: "easeOut" }}
-          className="w-full lg:w-[55%] h-[350px] md:h-[600px] lg:h-[800px] relative mt-10 lg:mt-0"
-        >
-          {/* Floating Cards */}
+          {/* Zooming Glassmorphism Portal */}
           <motion.div
-            style={{ y: yCard1 }}
-            className="absolute top-[5%] md:top-[10%] right-[0%] md:right-[10%] w-[220px] md:w-[260px] glass-panel rounded-2xl p-3 md:p-4 z-20 scale-90 md:scale-100"
+            style={{
+              width: widthPortal,
+              height: heightPortal,
+              borderRadius: radiusPortal,
+              y: yPortal
+            }}
+            className="absolute bottom-0 md:bottom-[-10vh] glass-panel overflow-hidden border border-white/20 shadow-[0_30px_100px_rgba(0,0,0,0.8),inset_0_1px_0_0_rgba(255,255,255,0.2)] z-20 flex flex-col items-center justify-center bg-[#0a0f1d]/60 backdrop-blur-3xl"
           >
-            <p className="text-[10px] md:text-xs text-slate-400 mb-1">Ownership</p>
-            <h3 className="text-xl md:text-2xl font-semibold text-white mb-2">100%</h3>
-            <p className="text-[10px] md:text-xs text-emerald-400 flex items-center gap-1">
-              <Shield className="w-3 h-3 animate-pulse" /> Yours after final payment
-            </p>
-          </motion.div>
-
-          <motion.div
-            style={{ y: yCard2 }}
-            className="absolute top-[40%] right-[-5%] w-[260px] glass-panel rounded-2xl p-4 hidden lg:block z-20"
-          >
-            <p className="text-xs text-slate-400 mb-1">Point of Contact</p>
-            <h3 className="text-2xl font-semibold text-white mb-2">1</h3>
-            <p className="text-xs text-emerald-400 flex items-center gap-1">
-              <User className="w-3 h-3" /> Single contact, start to finish
-            </p>
-          </motion.div>
-
-          <motion.div
-            style={{ y: yCard3 }}
-            className="absolute bottom-[10%] md:bottom-[20%] left-[0%] md:left-[10%] w-[240px] md:w-[260px] glass-panel rounded-2xl p-4 md:p-5 z-20 scale-90 md:scale-100"
-          >
-            <p className="text-[10px] md:text-xs text-slate-400 mb-1">Our Process</p>
-            <h3 className="text-2xl md:text-3xl font-semibold text-white mb-3 md:mb-4">7</h3>
-            <p className="text-[10px] md:text-xs text-emerald-400 flex items-center gap-1 mb-2 md:mb-3">
-              <ListChecks className="w-3 h-3" /> Transparent steps from day one
-            </p>
-            <div className="flex items-end gap-1.5 h-6 md:h-8">
-              {[40, 60, 45, 80, 55, 90, 75].map((h, i) => (
-                <div key={i} className="w-full bg-accent-electric/30 rounded-sm" style={{ height: `${h}%` }}>
-                  <div className="w-full bg-accent-electric rounded-sm transition-all duration-1000 shadow-[0_0_5px_rgba(59,130,246,0.5)]" style={{ height: '100%' }} />
+            <motion.div
+              style={{ opacity: opacityPortalContent, scale: scalePortalContent }}
+              className="w-full h-full p-6 md:p-12 relative flex flex-col"
+            >
+              {/* Fake Dashboard Header */}
+              <div className="w-full flex items-center justify-between pb-6 border-b border-white/10 mb-8 mt-2 md:mt-0">
+                <div className="flex gap-2.5">
+                  <div className="w-3.5 h-3.5 rounded-full bg-white/20" />
+                  <div className="w-3.5 h-3.5 rounded-full bg-white/20" />
+                  <div className="w-3.5 h-3.5 rounded-full bg-white/20" />
                 </div>
-              ))}
-            </div>
+                <div className="px-4 py-1.5 rounded-md bg-white/5 text-[10px] md:text-xs text-slate-300 font-mono tracking-widest border border-white/5 flex items-center gap-2">
+                  <div className="w-2 h-2 rounded-full bg-[#38bdf8] animate-pulse shadow-[0_0_8px_rgba(56,189,248,0.8)]" />
+                  SYSTEM.CORE_ACTIVE
+                </div>
+              </div>
+
+              {/* Repurposed Stat Cards inside the Dashboard */}
+              <div className="flex-1 grid grid-cols-1 md:grid-cols-3 gap-6 max-w-5xl mx-auto w-full pt-10">
+                <div className="glass-panel border border-white/10 rounded-2xl p-8 flex flex-col justify-between hover:border-[#38bdf8]/40 transition-colors duration-300 shadow-[inset_0_1px_0_0_rgba(255,255,255,0.1)]">
+                  <p className="text-sm font-medium text-slate-400 tracking-wide uppercase">Ownership</p>
+                  <div className="mt-8">
+                    <h3 className="text-5xl font-black text-white mb-3">100%</h3>
+                    <p className="text-xs md:text-sm text-emerald-400 flex items-center gap-2 font-medium"><Shield className="w-4 h-4" /> Yours after final payment</p>
+                  </div>
+                </div>
+
+                <div className="glass-panel border border-white/10 rounded-2xl p-8 flex flex-col justify-between hover:border-[#8b5cf6]/40 transition-colors duration-300 shadow-[inset_0_1px_0_0_rgba(255,255,255,0.1)]">
+                  <p className="text-sm font-medium text-slate-400 tracking-wide uppercase">Point of Contact</p>
+                  <div className="mt-8">
+                    <h3 className="text-5xl font-black text-white mb-3">1</h3>
+                    <p className="text-xs md:text-sm text-emerald-400 flex items-center gap-2 font-medium"><User className="w-4 h-4" /> Direct engineer access</p>
+                  </div>
+                </div>
+
+                <div className="glass-panel border border-white/10 rounded-2xl p-8 flex flex-col justify-between hover:border-[#ec4899]/40 transition-colors duration-300 shadow-[inset_0_1px_0_0_rgba(255,255,255,0.1)]">
+                  <p className="text-sm font-medium text-slate-400 tracking-wide uppercase">Our Process</p>
+                  <div className="mt-8">
+                    <div className="flex items-end justify-between mb-3">
+                      <h3 className="text-5xl font-black text-white">7</h3>
+                      <div className="flex items-end gap-1.5 h-10 w-24">
+                        {[40, 60, 45, 80, 55, 90, 75].map((h, i) => (
+                          <div key={i} className="w-full bg-accent-electric/30 rounded-sm" style={{ height: `${h}%` }}>
+                            <div className="w-full bg-accent-electric rounded-sm transition-all duration-1000 shadow-[0_0_5px_rgba(59,130,246,0.5)]" style={{ height: '100%' }} />
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                    <p className="text-xs md:text-sm text-emerald-400 flex items-center gap-2 font-medium"><ListChecks className="w-4 h-4" /> Transparent delivery steps</p>
+                  </div>
+                </div>
+              </div>
+
+              {/* Deep 3D Grid inside portal */}
+              <div className="absolute inset-0 bg-[radial-gradient(#ffffff15_1px,transparent_1px)] [background-size:32px_32px] [mask-image:radial-gradient(ellipse_70%_60%_at_50%_50%,#000_70%,transparent_100%)] pointer-events-none -z-10 opacity-30" />
+            </motion.div>
           </motion.div>
-        </motion.div>
-      </section>
+        </div>
+      </div>
 
       {/* ─── 2. ABOUT SECTION (Zipper Scroll Effect with 3D Core Object) ─── */}
       <section ref={aboutRef} id="about" className="w-full max-w-[1200px] mx-auto px-5 md:px-10 py-28 relative z-10">
-        
+
         {/* Giant horizontal sliding watermark text */}
-        <motion.div 
+        <motion.div
           style={{ x: xWatermark }}
           className="absolute top-[10%] left-0 text-[10vw] font-black text-white/[0.02] tracking-[0.25em] select-none uppercase pointer-events-none whitespace-nowrap"
         >
@@ -384,11 +385,11 @@ export default function Home() {
 
         {/* Vision & Mission Cards with Interactive 3D/SVG Visual Objects */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-10 mb-24 relative z-10">
-          
+
           {/* Vision Card with Radar Scanner Object */}
           <motion.div
             style={{ x: xVision, opacity: opacityVision }}
-            className="group relative bg-surface-container-lowest p-8 md:p-10 rounded-3xl border border-white/5 hover:border-accent-electric/30 transition-all duration-500 shadow-2xl flex flex-col justify-between"
+            className="group relative glass-panel p-8 md:p-10 rounded-3xl hover:border-accent-electric/40 transition-all duration-500 shadow-2xl flex flex-col justify-between overflow-hidden"
           >
             <div>
               <div className="flex items-start justify-between mb-4">
@@ -412,7 +413,7 @@ export default function Home() {
           {/* Mission Card with Isometric Architecture Core Object */}
           <motion.div
             style={{ x: xMission, opacity: opacityMission }}
-            className="group relative bg-surface-container-lowest p-8 md:p-10 rounded-3xl border border-white/5 hover:border-accent-purple/30 transition-all duration-500 shadow-2xl flex flex-col justify-between"
+            className="group relative glass-panel p-8 md:p-10 rounded-3xl hover:border-accent-purple/40 transition-all duration-500 shadow-2xl flex flex-col justify-between overflow-hidden"
           >
             <div>
               <div className="flex items-start justify-between mb-4">
@@ -458,7 +459,7 @@ export default function Home() {
         {/* Stat Block */}
         <motion.div
           style={{ scale: scaleStat, opacity: opacityStat }}
-          className="relative bg-surface-container-lowest p-8 md:p-12 rounded-3xl border border-white/5 mb-20 shadow-2xl overflow-hidden group"
+          className="relative glass-panel p-8 md:p-12 rounded-3xl mb-20 shadow-[0_20px_50px_rgba(0,0,0,0.5)] overflow-hidden group hover:border-white/20 transition-colors duration-500"
         >
           <div className="absolute -inset-[10px] bg-gradient-to-r from-accent-electric/10 to-accent-purple/10 opacity-0 group-hover:opacity-100 transition-opacity duration-700 blur-xl pointer-events-none" />
           <div className="flex flex-col md:flex-row gap-8 md:gap-16 items-start relative z-10">
@@ -499,10 +500,10 @@ export default function Home() {
           ].map((service) => {
             const Icon = serviceIconMap[service.icon] || Code;
             return (
-              <motion.div 
+              <motion.div
                 key={service.id}
                 style={{ opacity: service.opacity, y: service.y, scale: service.scale }}
-                className="group relative bg-surface-container-lowest p-8 rounded-3xl border border-white/5 hover:border-accent-electric/30 transition-colors duration-500 hover:shadow-2xl flex flex-col justify-between"
+                className="group relative glass-panel p-8 rounded-3xl hover:border-white/20 transition-all duration-500 hover:shadow-[0_20px_50px_rgba(0,0,0,0.5)] flex flex-col justify-between overflow-hidden"
               >
                 <div>
                   <div className="flex items-start justify-between mb-8">
@@ -511,14 +512,14 @@ export default function Home() {
                     </div>
                     <span className="text-4xl font-bold text-white/5 group-hover:text-accent-electric/10 transition-colors select-none">{service.number}</span>
                   </div>
-                  
+
                   <h3 className="text-xl md:text-2xl font-bold mb-3 text-white">{service.title}</h3>
                   <p className="text-text-secondary text-sm md:text-base leading-relaxed mb-4">{service.description}</p>
                 </div>
 
                 {/* Micro Animated Object for each Service */}
                 <ServiceMicroVisual type={service.typeId} />
-                
+
                 <div className="w-full h-[1px] bg-white/5 mt-4" />
               </motion.div>
             );
@@ -569,7 +570,7 @@ export default function Home() {
             className="w-full lg:w-3/5 relative z-10 px-2"
           >
             {/* Outer glowing border container */}
-            <motion.div 
+            <motion.div
               animate={{ y: [0, -10, 0] }}
               transition={{ duration: 5, repeat: Infinity, ease: "easeInOut" }}
               className="rounded-3xl md:rounded-[2.5rem] p-[1px] md:p-[2px] bg-gradient-to-br from-[#3b82f6]/50 via-[#0a0f1d] to-[#8b5cf6]/50 shadow-[0_0_30px_-5px_rgba(59,130,246,0.4)] md:shadow-[0_0_50px_-10px_rgba(59,130,246,0.5)] rotate-0 lg:rotate-[2deg] hover:rotate-0 transition-transform duration-700 ease-out"
@@ -678,41 +679,48 @@ export default function Home() {
                 exit={{ scale: 1.2, opacity: 0 }}
                 className="absolute inset-0 flex items-center justify-center"
               >
-                {/* 3D Glass Hexagonal Prism using SVGs */}
-                <svg className="w-[180px] h-[180px] filter drop-shadow-[0_0_30px_rgba(139,92,246,0.6)]" viewBox="0 0 100 100">
-                  <motion.polygon
-                    points="50,10 85,35 50,60"
-                    fill="rgba(139,92,246,0.25)"
-                    stroke="#8b5cf6"
-                    strokeWidth="1.5"
-                    animate={shattering ? { x: 30, y: -30, rotate: 45, opacity: 0 } : { y: [0, -3, 0] }}
-                    transition={shattering ? { duration: 0.5 } : { repeat: Infinity, duration: 3, ease: "easeInOut" }}
+                {/* Glowing Core Behind the Glass */}
+                <div className="absolute w-28 h-28 bg-accent-purple/50 rounded-full blur-2xl animate-pulse" />
+                <div className="absolute w-20 h-20 bg-[#38bdf8]/50 rounded-full blur-xl animate-pulse delay-150" />
+
+                {/* 3D Glassmorphism Prism (Diamond) */}
+                <motion.div className="relative w-[140px] h-[140px] rotate-45 flex flex-wrap shadow-[0_0_40px_rgba(139,92,246,0.3)] rounded-xl">
+                  {/* Top Left Shard */}
+                  <motion.div
+                    className="w-1/2 h-1/2 rounded-tl-xl border-t border-l border-white/30 bg-white/10 backdrop-blur-md shadow-[inset_2px_2px_15px_rgba(255,255,255,0.2)]"
+                    animate={shattering ? { x: -60, y: -60, rotate: -45, opacity: 0 } : { y: [0, -2, 0], x: [0, -2, 0] }}
+                    transition={shattering ? { duration: 0.6, ease: "easeOut" } : { repeat: Infinity, duration: 4, ease: "easeInOut" }}
                   />
-                  <motion.polygon
-                    points="50,10 15,35 50,60"
-                    fill="rgba(56,189,248,0.25)"
-                    stroke="#38bdf8"
-                    strokeWidth="1.5"
-                    animate={shattering ? { x: -30, y: -30, rotate: -45, opacity: 0 } : { y: [0, 3, 0] }}
-                    transition={shattering ? { duration: 0.5 } : { repeat: Infinity, duration: 3, ease: "easeInOut", delay: 0.2 }}
+                  {/* Top Right Shard */}
+                  <motion.div
+                    className="w-1/2 h-1/2 rounded-tr-xl border-t border-r border-white/20 bg-white/5 backdrop-blur-md shadow-[inset_-2px_2px_15px_rgba(255,255,255,0.1)]"
+                    animate={shattering ? { x: 60, y: -60, rotate: 45, opacity: 0 } : { y: [0, -2, 0], x: [0, 2, 0] }}
+                    transition={shattering ? { duration: 0.6, ease: "easeOut" } : { repeat: Infinity, duration: 4, ease: "easeInOut", delay: 0.2 }}
                   />
-                  <motion.polygon
-                    points="50,90 85,35 50,60"
-                    fill="rgba(59,130,246,0.25)"
-                    stroke="#3b82f6"
-                    strokeWidth="1.5"
-                    animate={shattering ? { x: 30, y: 30, rotate: -45, opacity: 0 } : { y: [0, -2, 0] }}
-                    transition={shattering ? { duration: 0.5 } : { repeat: Infinity, duration: 4, ease: "easeInOut", delay: 0.4 }}
+                  {/* Bottom Left Shard */}
+                  <motion.div
+                    className="w-1/2 h-1/2 rounded-bl-xl border-b border-l border-white/20 bg-white/5 backdrop-blur-md shadow-[inset_2px_-2px_15px_rgba(255,255,255,0.1)]"
+                    animate={shattering ? { x: -60, y: 60, rotate: 45, opacity: 0 } : { y: [0, 2, 0], x: [0, -2, 0] }}
+                    transition={shattering ? { duration: 0.6, ease: "easeOut" } : { repeat: Infinity, duration: 4, ease: "easeInOut", delay: 0.4 }}
                   />
-                  <motion.polygon
-                    points="50,90 15,35 50,60"
-                    fill="rgba(236,72,153,0.25)"
-                    stroke="#ec4899"
-                    strokeWidth="1.5"
-                    animate={shattering ? { x: -30, y: 30, rotate: 45, opacity: 0 } : { y: [0, 2, 0] }}
-                    transition={shattering ? { duration: 0.5 } : { repeat: Infinity, duration: 4, ease: "easeInOut", delay: 0.6 }}
+                  {/* Bottom Right Shard */}
+                  <motion.div
+                    className="w-1/2 h-1/2 rounded-br-xl border-b border-r border-white/30 bg-white/10 backdrop-blur-md shadow-[inset_-2px_-2px_15px_rgba(255,255,255,0.2)]"
+                    animate={shattering ? { x: 60, y: 60, rotate: -45, opacity: 0 } : { y: [0, 2, 0], x: [0, 2, 0] }}
+                    transition={shattering ? { duration: 0.6, ease: "easeOut" } : { repeat: Infinity, duration: 4, ease: "easeInOut", delay: 0.6 }}
                   />
-                </svg>
+
+                  {/* Center Lock Icon Layered on Top (Rotated back to normal) */}
+                  <motion.div
+                    className="absolute inset-0 flex items-center justify-center pointer-events-none"
+                    animate={shattering ? { scale: 0, opacity: 0 } : { rotate: -45 }}
+                    transition={{ duration: 0.4 }}
+                  >
+                    <div className="w-12 h-12 rounded-full bg-[#03050B]/60 backdrop-blur-xl border border-white/20 flex items-center justify-center text-white/90 shadow-[0_0_20px_rgba(255,255,255,0.2)]">
+                      <LockKeyhole className="w-5 h-5" />
+                    </div>
+                  </motion.div>
+                </motion.div>
 
                 {/* Pulse Ring */}
                 <div className="absolute w-[180px] h-[180px] rounded-full border border-accent-purple/30 animate-ping opacity-30 pointer-events-none" />
@@ -748,12 +756,12 @@ export default function Home() {
       {/* ─── 6. ROADMAP TIMELINE ─── */}
       <AnimatePresence>
         {decrypted && (
-          <motion.section 
+          <motion.section
             initial={{ opacity: 0, height: 0 }}
             animate={{ opacity: 1, height: "auto" }}
             exit={{ opacity: 0, height: 0 }}
             transition={{ duration: 0.8, ease: "easeInOut" }}
-            id="how-we-work" 
+            id="how-we-work"
             className="w-full relative z-10 overflow-hidden"
           >
             <div className="absolute inset-0 bg-gradient-to-b from-transparent via-[#060914] to-transparent pointer-events-none z-0" />
@@ -781,7 +789,7 @@ export default function Home() {
         {/* Main Pricing Card with Glow Border */}
         <motion.div
           style={{ scale: scalePricingCard, opacity: opacityPricingCard }}
-          className="relative w-full max-w-xl p-8 md:p-10 rounded-3xl bg-surface-container-lowest border-2 border-accent-electric shadow-[0_20px_60px_rgb(0,113,227,0.15)] mb-20 group overflow-hidden"
+          className="relative w-full max-w-xl p-8 md:p-10 rounded-3xl glass-panel border border-accent-electric/50 shadow-[0_20px_60px_rgb(0,113,227,0.3)] mb-20 group overflow-hidden hover:border-accent-electric transition-colors duration-500"
         >
           <div className="absolute -inset-[10px] bg-gradient-to-r from-accent-electric/10 via-accent-purple/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-700 blur-xl pointer-events-none" />
           <div className="absolute -top-4 left-1/2 -translate-x-1/2 px-4 py-1 bg-accent-electric text-white text-xs font-bold uppercase tracking-wider rounded-full shadow-lg">
@@ -840,7 +848,7 @@ export default function Home() {
               <motion.div
                 key={idx}
                 style={{ opacity: milestone.opacity, y: milestone.y, scale: milestone.scale }}
-                className="relative p-8 rounded-3xl bg-surface border border-white/5 shadow-lg flex flex-col justify-between text-center hover:border-accent-electric/30 transition-all duration-500 hover:shadow-2xl group overflow-hidden"
+                className="relative p-8 rounded-3xl glass-panel flex flex-col justify-between text-center hover:border-accent-electric/40 transition-all duration-500 hover:shadow-[0_20px_50px_rgba(0,0,0,0.5)] group overflow-hidden"
               >
                 <div className="absolute top-3 right-3 text-[9px] font-mono text-slate-500 bg-white/5 px-2 py-0.5 rounded border border-white/5">
                   {milestone.badge}
@@ -888,7 +896,7 @@ export default function Home() {
 
         <motion.div
           style={{ x: xContactRight, opacity: opacityContactRight }}
-          className="w-full lg:w-1/2 bg-surface-container-lowest p-8 md:p-10 rounded-3xl border border-white/5 shadow-2xl relative overflow-hidden"
+          className="w-full lg:w-1/2 glass-panel p-8 md:p-10 rounded-3xl shadow-[0_20px_50px_rgba(0,0,0,0.5)] relative overflow-hidden"
         >
           <div className="flex items-center justify-between pb-4 mb-6 border-b border-white/5">
             <span className="text-xs font-mono text-slate-400 flex items-center gap-2">
@@ -901,7 +909,7 @@ export default function Home() {
 
           <AnimatePresence>
             {isPending && (
-              <motion.div 
+              <motion.div
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 exit={{ opacity: 0 }}
@@ -1032,7 +1040,7 @@ function VisionScannerObject() {
     <div className="relative w-full h-[180px] sm:h-[210px] flex items-center justify-center overflow-hidden rounded-2xl bg-[#030612]/70 border border-white/5 my-4 group">
       {/* Background Radial Glow */}
       <div className="absolute w-[180px] h-[180px] bg-accent-electric/15 rounded-full blur-[40px] pointer-events-none" />
-      
+
       <svg className="w-[170px] h-[170px]" viewBox="0 0 200 200">
         {/* Outer dashed orbital ring */}
         <motion.circle
@@ -1055,7 +1063,7 @@ function VisionScannerObject() {
         {/* Inner solid ring */}
         <circle cx="100" cy="100" r="35" fill="none" stroke="rgba(56, 189, 248, 0.4)" strokeWidth="1" />
         <circle cx="100" cy="100" r="8" fill="rgba(56, 189, 248, 0.8)" className="animate-pulse" />
-        
+
         {/* Radar Scanner Beam */}
         <motion.g
           animate={{ rotate: 360 }}
@@ -1069,11 +1077,11 @@ function VisionScannerObject() {
           />
           <line x1="100" y1="100" x2="185" y2="100" stroke="#38bdf8" strokeWidth="1.5" />
         </motion.g>
-        
+
         {/* Coordinate crosshairs */}
         <line x1="15" y1="100" x2="185" y2="100" stroke="rgba(255,255,255,0.1)" strokeWidth="1" strokeDasharray="2 4" />
         <line x1="100" y1="15" x2="100" y2="185" stroke="rgba(255,255,255,0.1)" strokeWidth="1" strokeDasharray="2 4" />
-        
+
         {/* Radar ping dots */}
         <motion.circle
           cx="140" cy="70" r="3.5"
@@ -1253,11 +1261,10 @@ function CustomArchitectureEngine({ activeTab, setActiveTab }) {
               <button
                 key={tab.id}
                 onClick={() => setActiveTab(tab.id)}
-                className={`px-3 py-1.5 rounded-xl text-xs font-medium flex items-center gap-1.5 transition-all cursor-pointer ${
-                  isActive 
-                    ? 'bg-accent-electric text-white shadow-[0_0_15px_rgba(59,130,246,0.5)]' 
+                className={`px-3 py-1.5 rounded-xl text-xs font-medium flex items-center gap-1.5 transition-all cursor-pointer ${isActive
+                    ? 'bg-accent-electric text-white shadow-[0_0_15px_rgba(59,130,246,0.5)]'
                     : 'bg-white/5 text-slate-400 hover:text-white hover:bg-white/10'
-                }`}
+                  }`}
               >
                 <TabIcon className="w-3.5 h-3.5" />
                 {tab.label}
@@ -1541,9 +1548,9 @@ function ContactRelayTerminal() {
       </div>
 
       <div className="space-y-3">
-        <a 
-          href="https://wa.me/916351902265" 
-          target="_blank" 
+        <a
+          href="https://wa.me/916351902265"
+          target="_blank"
           rel="noopener noreferrer"
           className="w-full p-4 rounded-2xl bg-emerald-500/10 border border-emerald-500/30 hover:border-emerald-500/60 hover:bg-emerald-500/15 transition-all flex items-center justify-between group cursor-pointer"
         >
@@ -1559,8 +1566,8 @@ function ContactRelayTerminal() {
           <ArrowRight className="w-4 h-4 text-emerald-400 group-hover:translate-x-1 transition-transform" />
         </a>
 
-        <a 
-          href="tel:+916351902265" 
+        <a
+          href="tel:+916351902265"
           className="w-full p-4 rounded-2xl bg-blue-500/10 border border-blue-500/30 hover:border-blue-500/60 hover:bg-blue-500/15 transition-all flex items-center justify-between group cursor-pointer"
         >
           <div className="flex items-center gap-3">
@@ -1575,8 +1582,8 @@ function ContactRelayTerminal() {
           <ArrowRight className="w-4 h-4 text-blue-400 group-hover:translate-x-1 transition-transform" />
         </a>
 
-        <a 
-          href="mailto:team.formatyk@gmail.com" 
+        <a
+          href="mailto:team.formatyk@gmail.com"
           className="w-full p-4 rounded-2xl bg-purple-500/10 border border-purple-500/30 hover:border-purple-500/60 hover:bg-purple-500/15 transition-all flex items-center justify-between group cursor-pointer"
         >
           <div className="flex items-center gap-3">
@@ -1639,15 +1646,15 @@ function BottomTimeline() {
   return (
     <div className="fixed bottom-6 sm:bottom-8 left-1/2 -translate-x-1/2 z-50 max-w-[95vw]">
       {/* Outer Dock Container with iOS Blur */}
-      <motion.div 
+      <motion.div
         initial={{ y: 50, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
         transition={{ duration: 0.6, ease: "easeOut" }}
-        className="relative rounded-full p-1.5 sm:p-2 bg-[#030614]/85 backdrop-blur-2xl border border-white/10 shadow-[0_20px_50px_rgba(0,0,0,0.8),0_0_30px_rgba(59,130,246,0.15)] flex items-center gap-1 sm:gap-1.5 overflow-hidden"
+        className="relative rounded-full p-1.5 sm:p-2 glass-panel flex items-center gap-1 sm:gap-1.5 overflow-hidden shadow-[0_20px_50px_rgba(0,0,0,0.8),0_0_30px_rgba(59,130,246,0.15)]"
       >
         {/* Real-time Smooth Progress Line on Top Border */}
         <div className="absolute top-0 left-4 right-4 h-[2px] bg-white/5 rounded-full overflow-hidden">
-          <motion.div 
+          <motion.div
             style={{ scaleX: scrollYProgress }}
             className="h-full bg-gradient-to-r from-[#3b82f6] via-[#38bdf8] to-[#8b5cf6] origin-left rounded-full shadow-[0_0_8px_rgba(56,189,248,0.8)]"
           />
@@ -1663,9 +1670,8 @@ function BottomTimeline() {
               href={step.href}
               whileHover={{ scale: 1.06 }}
               whileTap={{ scale: 0.94 }}
-              className={`relative px-3 sm:px-4 py-2 rounded-full text-xs font-semibold tracking-wider flex items-center gap-2 transition-colors duration-200 cursor-pointer select-none ${
-                isActive ? 'text-white' : 'text-slate-400 hover:text-slate-200'
-              }`}
+              className={`relative px-3 sm:px-4 py-2 rounded-full text-xs font-semibold tracking-wider flex items-center gap-2 transition-colors duration-200 cursor-pointer select-none ${isActive ? 'text-white' : 'text-slate-400 hover:text-slate-200'
+                }`}
             >
               {/* iOS Animated Sliding Pill Background */}
               {isActive && (
@@ -1684,9 +1690,9 @@ function BottomTimeline() {
 
               {/* Active Indicator Pulse Dot */}
               {isActive && (
-                <motion.span 
+                <motion.span
                   layoutId="active-dot"
-                  className="relative z-10 w-1.5 h-1.5 rounded-full bg-[#38bdf8] shadow-[0_0_8px_rgba(56,189,248,1)] animate-pulse" 
+                  className="relative z-10 w-1.5 h-1.5 rounded-full bg-[#38bdf8] shadow-[0_0_8px_rgba(56,189,248,1)] animate-pulse"
                 />
               )}
             </motion.a>
@@ -1790,7 +1796,7 @@ function HowWeWorkTimeline() {
 
       {/* Roadmap Container */}
       <div ref={containerRef} className="relative">
-        
+
         {/* Desktop S-Curve SVG */}
         <div className="hidden md:block absolute left-1/2 -translate-x-1/2 top-0 bottom-0 w-[160px] pointer-events-none z-0">
           <svg className="w-full h-full" viewBox="0 0 160 1320" fill="none" preserveAspectRatio="none">
@@ -1833,7 +1839,7 @@ function HowWeWorkTimeline() {
           {steps.map((step, index) => {
             const StepIcon = step.icon;
             const isLeft = step.textSide === 'left';
-            
+
             return (
               <div
                 key={step.num}
@@ -1932,6 +1938,53 @@ function HowWeWorkTimeline() {
           })}
         </div>
       </div>
+    </div>
+  );
+}
+
+/* ─── Interactive Hero Text (Cursor Spotlight / Fluid Reveal) ─── */
+function InteractiveFormatykText() {
+  const mouseX = useMotionValue(0);
+  const mouseY = useMotionValue(0);
+
+  // Buttery smooth physics for the cursor trail
+  const smoothX = useSpring(mouseX, { stiffness: 50, damping: 20 });
+  const smoothY = useSpring(mouseY, { stiffness: 50, damping: 20 });
+
+  function handleMouseMove(e) {
+    const { currentTarget, clientX, clientY } = e;
+    const { left, top } = currentTarget.getBoundingClientRect();
+    mouseX.set(clientX - left);
+    mouseY.set(clientY - top);
+  }
+
+  // Dynamic radial gradient mask that follows the smoothed cursor
+  const maskImage = useMotionTemplate`radial-gradient(350px circle at ${smoothX}px ${smoothY}px, black 0%, transparent 100%)`;
+
+  return (
+    <div
+      className="relative w-full flex items-center justify-center cursor-crosshair group py-4 md:py-8"
+      onMouseMove={handleMouseMove}
+    >
+      {/* Background Static Layer - Ghosted text */}
+      <motion.h1
+        initial={{ opacity: 0, scale: 0.95 }}
+        animate={{ opacity: 1, scale: 1 }}
+        transition={{ delay: 0.4, duration: 0.8, ease: "easeOut" }}
+        className="text-[14vw] md:text-[10rem] lg:text-[13rem] leading-[0.85] font-black tracking-tighter text-white/5 uppercase select-none transition-colors duration-500 group-hover:text-white/0"
+      >
+        FORMATYK
+      </motion.h1>
+
+      {/* Foreground Interactive Reveal Layer */}
+      <motion.div
+        className="absolute inset-0 flex items-center justify-center pointer-events-none opacity-0 group-hover:opacity-100 transition-opacity duration-500"
+        style={{ WebkitMaskImage: maskImage, maskImage: maskImage }}
+      >
+        <h1 className="text-[14vw] md:text-[10rem] lg:text-[13rem] leading-[0.85] font-black tracking-tighter uppercase select-none text-transparent bg-clip-text bg-gradient-to-r from-[#3b82f6] via-[#ec4899] to-[#8b5cf6] animate-gradient bg-[length:200%_auto] filter drop-shadow-[0_0_20px_rgba(236,72,153,0.5)]">
+          FORMATYK
+        </h1>
+      </motion.div>
     </div>
   );
 }

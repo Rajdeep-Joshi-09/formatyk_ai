@@ -7,8 +7,8 @@ import { ArrowRight, Sparkles } from 'lucide-react';
 
 export default function Navbar() {
   return (
-    <header className="fixed top-0 w-full z-40 bg-[#03050B]/60 backdrop-blur-xl border-b border-white/5 transition-colors duration-300">
-      <div className="max-w-[1400px] mx-auto px-5 md:px-10 h-16 flex items-center justify-between">
+    <header className="fixed top-4 md:top-6 left-1/2 -translate-x-1/2 w-[95%] max-w-[1200px] z-40 glass-panel rounded-full shadow-[0_20px_40px_rgba(0,0,0,0.4)] transition-all duration-300">
+      <div className="px-4 md:px-6 h-14 md:h-16 flex items-center justify-between">
         {/* Left Brand Identity */}
         <Link href="/" className="flex items-center gap-3 group cursor-pointer">
           <div className="relative">
