@@ -24,19 +24,17 @@
   --font-inter: "Inter", sans-serif;
 }
 
+/* Global Cursor Hiding (Unlayered with !important to override all browser defaults & Tailwind layers) */
+html, body, *, *::before, *::after, a, button, input, textarea, select, label, [role="button"] {
+  cursor: none !important;
+}
+
 @layer base {
   html {
     scroll-behavior: smooth;
   }
-  *, *::before, *::after {
-    cursor: none !important;
-  }
   body {
     @apply bg-background-page text-text-primary font-inter antialiased overflow-x-hidden;
-    cursor: none;
-  }
-  a, button, input, textarea, select, label, [role="button"] {
-    cursor: none !important;
   }
 }
 

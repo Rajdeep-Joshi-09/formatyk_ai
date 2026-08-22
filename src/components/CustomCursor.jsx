@@ -12,15 +12,39 @@ export default function CustomCursor() {
   const cursorYSpring = useSpring(cursorY, springConfig);
 
   const [isHovering, setIsHovering] = useState(false);
+  const [isVisible, setIsVisible] = useState(false);
 
   useEffect(() => {
+    // Force hide native cursor on document root
+    document.documentElement.style.cursor = 'none';
+    document.body.style.cursor = 'none';
+
     const updateMousePosition = (e) => {
       cursorX.set(e.clientX);
       cursorY.set(e.clientY);
+      if (!isVisible) setIsVisible(true);
     };
 
+    const handleMouseLeave = () => setIsVisible(false);
+    const handleMouseEnter = () => setIsVisible(true);
+
     const handleMouseOver = (e) => {
-      if (e.target.tagName.toLowerCase() === 'a' || e.target.tagName.toLowerCase() === 'button' || e.target.closest('a') || e.target.closest('button')) {
+      const target = e.target;
+      if (!target) return;
+      const tag = target.tagName ? target.tagName.toLowerCase() : '';
+      if (
+        tag === 'a' ||
+        tag === 'button' ||
+        tag === 'input' ||
+        tag === 'textarea' ||
+        tag === 'select' ||
+        target.closest('a') ||
+        target.closest('button') ||
+        target.closest('input') ||
+        target.closest('textarea') ||
+        target.closest('select') ||
+        target.getAttribute('role') === 'button'
+      ) {
         setIsHovering(true);
       } else {
         setIsHovering(false);
@@ -28,13 +52,17 @@ export default function CustomCursor() {
     };
 
     window.addEventListener('mousemove', updateMousePosition);
+    window.addEventListener('mouseleave', handleMouseLeave);
+    window.addEventListener('mouseenter', handleMouseEnter);
     window.addEventListener('mouseover', handleMouseOver);
 
     return () => {
       window.removeEventListener('mousemove', updateMousePosition);
+      window.removeEventListener('mouseleave', handleMouseLeave);
+      window.removeEventListener('mouseenter', handleMouseEnter);
       window.removeEventListener('mouseover', handleMouseOver);
     };
-  }, [cursorX, cursorY]);
+  }, [cursorX, cursorY, isVisible]);
 
   return (
     <>
