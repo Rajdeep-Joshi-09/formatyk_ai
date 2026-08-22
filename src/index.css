@@ -28,8 +28,15 @@
   html {
     scroll-behavior: smooth;
   }
+  *, *::before, *::after {
+    cursor: none !important;
+  }
   body {
     @apply bg-background-page text-text-primary font-inter antialiased overflow-x-hidden;
+    cursor: none;
+  }
+  a, button, input, textarea, select, label, [role="button"] {
+    cursor: none !important;
   }
 }
 
